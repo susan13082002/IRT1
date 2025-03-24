@@ -69,6 +69,40 @@ Start installation and reboot after completion.
 
 ## Step 3- Hive5 and Cortex Installation
 
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+    restart: unless-stopped
+
+  thehive:
+    image: strangebee/thehive:5
+    container_name: thehive
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1g
+    depends_on:
+      - elasticsearch
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+
+  cortex:
+    image: thehiveproject/cortex:latest
+    container_name: cortex
+    depends_on:
+      - elasticsearch
+    ports:
+      - "9001:9001"
+    restart: unless-stopped
+
+
 ![hive-license](https://github.com/user-attachments/assets/bf85fb2f-2305-4ba3-984c-65eb28238c43)
 
 ![new cortex and hive](https://github.com/user-attachments/assets/a72d9e52-28ea-49c0-bde1-16c74996329b)
