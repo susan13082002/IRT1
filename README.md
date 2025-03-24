@@ -14,7 +14,6 @@ Security Automation Incident Response Using Docker
 >Assign static IPs for easy integration between TheHive, MISP, Cortex, and SIEM
 
 
-
 # Step by Step Installation:
 
 ## Step 1-Install Ubuntu VM as a SIEM machine
@@ -252,6 +251,79 @@ changed: Pucchu456@27
 ## Step 8 - Integrating MISP and thehive
 
 ## Step 9 - Integrating Cortex and thehive
+
+## Step 10 - Reducing the version of Cortex2
+version: '3.7'
+ 
+services:
+  Elasticsearch service
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+    restart: unless-stopped
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - hive_network  # Attach to custom network
+ 
+  TheHive service
+  thehive:
+    image: thehiveproject/thehive4
+    container_name: thehive
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1g
+      - CORTEX_URL="http://192.168.1.10:9001"  # Correct container name for Cortex
+      #- CORTEX_APIKEY="LTuoOmxx2gbqKuOm78+/snu/A0zkNRVs"
+      #- CORTEX_THEHIVE_API_KEY="FpwQZcr0AIabinhzgs0szhzAvU6jtPEq"
+      - MISP_URL="https://192.168.1.10"
+      - MISP_APIKEY=${MISP_APIKEY}
+      - MISP_CERT_IGNORE=true
+    depends_on:
+      - elasticsearch
+      - cortex  # Ensure Cortex is started before TheHive    
+    ports:
+      -  "9000:9000"
+    volumes:
+      - thehive_data:/data
+    restart: unless-stopped
+    networks:
+      - hive_network  # Attach to custom network
+ 
+  Cortex service
+  cortex:
+    image: thehiveproject/cortex:2.1.3
+    container_name: cortex
+    environment:
+      - CORTEX_THEHIVE_URL="http://192.168.1.10:9000"  # TheHive container URL
+      #- CORTEX_APIKEY="LTuoOmxx2gbqKuOm78+/snu/A0zkNRVs"  # Use environment variable for the Cortex API key
+      #- CORTEX_THEHIVE_API_KEY="FpwQZcr0AIabinhzgs0szhzAvU6jtPEq"  # TheHive API key for Cortex
+      - CORTEX_AUTHENTICATION=Bearer  # Set authentication to Bearer token for TheHive API
+    depends_on:
+      - elasticsearch  # Only depend on Elasticsearch, not TheHive
+    ports:
+      - "9001:9001"
+    restart: unless-stopped
+    volumes:
+      - cortex_data:/data  # Persistent storage for Cortex data
+    networks:
+      - hive_network  # Attach to custom network
+ 
+volumes:
+  es_data:
+    driver: local  # Persist Elasticsearch data
+  thehive_data:
+    driver: local  # Persist TheHive data
+  cortex_data:
+    driver: local  # Persist Cortex data
+ 
+networks:
+  hive_network:
+    driver: bridge  # Use the bridge network for communication
 
 ## Step 10 - Setting up Cortex Analysers
 
