@@ -69,7 +69,20 @@ Security Automation Incident Response Using Docker
 
 ## Step 3- Hive5 and Cortex Installation
 
->version: '3.7'
+>sudo apt install -y wget git python3 python3-pip openjdk-11-jre
+
+>sudo apt update && sudo apt upgrade -y
+
+>sudo apt install -y docker.io docker-compose
+
+>sudo systemctl enable --now docker
+
+
+>mkdir -p ~/thehive && cd ~/thehive
+
+>sudo nano docker-compose.yml
+>
+>>version: '3.7'
 
 >services:
 
@@ -474,6 +487,14 @@ changed: Pucchu456@27
 ## 4 - Integration between Cortex Hive and Hive MISP not working as expected with Hive 4 
 
 ## 5- Transitioning from Cortex 3 to Cortex 2 
+>
+>While doing some research i came accross a documentation which stated that Cortex 3 has some pki issues for authentication and hence suggested to transition to cortex 2
+>
+>https://github.com/TheHive-Project/TheHive/issues/940
+>
+>
+>![image](https://github.com/user-attachments/assets/91df50ed-bfa7-483c-a2d4-d5d5aded156f)
+
 
 
 
