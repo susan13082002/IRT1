@@ -142,10 +142,7 @@ Security Automation Incident Response Using Docker
 
 
 
-## Step 4- Transitioning from Hive5 to Hive4
 
-> The reason to transition from Hive5 to Hive 4 was the drawback regarding the free version license of 14 days. Post that we again the license expires, we would not be able to work with it.
-> Hence transitioned to Hive4
 
 ## Step 5- Hive4 and Cortex Installation
 
@@ -450,11 +447,37 @@ changed: Pucchu456@27
 
 # Step by Step Troubleshooting:
 
-## 1 - Cortex Voumes/Database not persistent
+## 1 - Transitioning from Hive5 to Hive4
 
-## 2 - SSL certificate issues MISP and hive
+> The reason to transition from Hive5 to Hive 4 was the drawback regarding the free version license of 14 days. Post that we again the license expires, we would not be able to work with it.
+> 
+> Hence transitioned to Hive4
+## 2 - Cortex Voumes/Database not persistent
 
-## 3 - Transitioning from Hive 5 to Hive 4 due to licnese issues
+>sudo docker-compose down
+>
+>sudo docker volume ls
+>
+>sudo docker volume rm thehive_thehive_data
+>
+>sudo docker volume rm thehive_mongo_data
+>
+>sudo docker-compose up -d
+>
+>docker exec -it thehive /bin/bash
+
+
+## 3 - SSL certificate issues MISP and hive
+![WhatsApp Image 2025-03-14 at 21 46 28](https://github.com/user-attachments/assets/c4e6a6f0-04f3-4773-8176-ef5eb667e057)
+
+
+## 4 - Integration between Cortex Hive and Hive MISP not working as expected with Hive 4 
+
+## 5- Transitioning from Cortex 3 to Cortex 2 
+
+
+
+
 
 
 
