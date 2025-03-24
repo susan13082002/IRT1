@@ -18,88 +18,113 @@ Security Automation Incident Response Using Docker
 
 ## Step 1-Install Ubuntu VM as a SIEM machine
 
-Open your VM software (e.g., VirtualBox or VMware).
+>Open your VM software (e.g., VirtualBox or VMware).
 
-Click New to create a new VM.
+>Click New to create a new VM.
 
-Name it Ubuntu and set the type as Linux and version as Ubuntu (64-bit).
+>Name it Ubuntu and set the type as Linux and version as Ubuntu (64-bit).
 
-Allocate RAM (at least 4GB, recommended 8GB or more).
+>Allocate RAM (at least 4GB, recommended 8GB or more).
 
-Create a Virtual Hard Disk (at least 25GB, recommended 50GB).
+>Create a Virtual Hard Disk (at least 25GB, recommended 50GB).
 
-Once the installation is done, restart the VM.
+>Once the installation is done, restart the VM.
 
-Log in and start using Ubuntu
+>Log in and start using Ubuntu
 
 ## Step2- Install Ubuntu VM as a SOC (Securty Operation Center)
-Open VirtualBox and click "New".
+>Open VirtualBox and click "New".
 
-Name your VM (e.g., Ubuntu-SOC).
+>Name your VM (e.g., Ubuntu-SOC).
 
-Set Type: Linux
+>Set Type: Linux
 
-Set Version: Ubuntu (64-bit)
+>Set Version: Ubuntu (64-bit)
 
-Click Next.
+>Click Next.
 
-Memory (RAM): Set to 8GB (8192MB) (recommended for SOC operations).
+>Memory (RAM): Set to 8GB (8192MB) (recommended for SOC operations).
 
-CPU Cores: Allocate at least 4 cores.
+>CPU Cores: Allocate at least 4 cores.
 
-Storage: Create a 50GB Virtual Hard Disk.
+>Storage: Create a 50GB Virtual Hard Disk.
 
-Follow the on-screen installation steps:
+>Follow the on-screen installation steps:
 
-Choose Language and Keyboard Layout.
+>Choose Language and Keyboard Layout.
 
-Select Install Ubuntu Server.
+>Select Install Ubuntu Server.
 
-Configure Network Settings (set static IP if required).
+>Configure Network Settings (set static IP if required).
 
-Set Hostname (e.g., soc-server).
+>Set Hostname (e.g., soc-server).
 
-Create a user with a strong password.
+>Create a user with a strong password.
 
-Install OpenSSH server (for remote access).
+>Install OpenSSH server (for remote access).
 
-Select "Guided - Use entire disk" for partitioning.
+>Select "Guided - Use entire disk" for partitioning.
 
-Start installation and reboot after completion.
+>Start installation and reboot after completion.
 
 ## Step 3- Hive5 and Cortex Installation
 
-version: '3.7'
+>version: '3.7'
 
-services:
+>services:
+
   elasticsearch:
+  
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    
     container_name: elasticsearch
+    
     environment:
+    
       - discovery.type=single-node
+      
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      
     ports:
+    
       - "9200:9200"
+      
     restart: unless-stopped
 
   thehive:
+  
     image: strangebee/thehive:5
+    
     container_name: thehive
+    
     environment:
+    
       - JAVA_OPTS=-Xms512m -Xmx1g
+      
     depends_on:
+    
       - elasticsearch
+      
     ports:
+    
       - "9000:9000"
+      
     restart: unless-stopped
 
   cortex:
+  
     image: thehiveproject/cortex:latest
+    
     container_name: cortex
+    
     depends_on:
+    
       - elasticsearch
+      
     ports:
+    
       - "9001:9001"
+      
     restart: unless-stopped
 
 
@@ -202,11 +227,11 @@ services:
 
 >sudo docker-compose up -d
 
-TheHive: Open http://192.168.1.10:9000
+>TheHive: Open http://192.168.1.10:9000
 
-Cortex: Open http://192.168.1.10:9001
+>Cortex: Open http://192.168.1.10:9001
 
-docker ps
+>docker ps
 
 hive:
 id admin@thehive.local
@@ -236,17 +261,17 @@ rohit
 
 ## Step 6- Elastic Search Installation
 
-sudo apt update
+>sudo apt update
 
-sudo apt install openjdk-11-jdk -y
+>sudo apt install openjdk-11-jdk -y
 
-sudo apt install elasticsearch -y
+>sudo apt install elasticsearch -y
 
-sudo systemctl start elasticsearch
+>sudo systemctl start elasticsearch
 
-sudo systemctl enable elasticsearch  
+>sudo systemctl enable elasticsearch  
 
-curl -X GET "localhost:9200/"
+>curl -X GET "localhost:9200/"
 
  
 ![elastic search gui](https://github.com/user-attachments/assets/5845920e-9d3b-4720-8dd6-3bc8c6ae1cd9)
@@ -259,21 +284,21 @@ curl -X GET "localhost:9200/"
 
 ## Step 7 - Installation of MISP
 
-git clone https://github.com/MISP/misp-docker.git
+>git clone https://github.com/MISP/misp-docker.git
 
-cd misp-docker/
+>cd misp-docker/
 
-cp template.env .env
+>cp template.env .env
 
-sudo nano docker-compose.yml
+>sudo nano docker-compose.yml
 
-(Change start_interval to start_period) 
+>(Change start_interval to start_period) 
 
-sudo docker-compose pull
+>sudo docker-compose pull
 
-sudo docker-compose up -d
+>sudo docker-compose up -d
 
-MISP Dashboard: https://localhost
+>MISP Dashboard: https://localhost
 
 username-admin@admin.test
 pass admin
@@ -284,53 +309,93 @@ changed: Pucchu456@27
 
 ## Step 8 - Integrating MISP and thehive
 
+
 ## Step 9 - Integrating Cortex and thehive
 
 ## Step 10 - Reducing the version of Cortex2
-version: '3.7'
+>version: '3.7'
  
-services:
-  Elasticsearch service
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-    ports:
-      - "9200:9200"
-    restart: unless-stopped
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
-    networks:
-      - hive_network  # Attach to custom network
+>services:
+
+  >Elasticsearch service
+
+  >elasticsearch:
+
+    >image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+  
+    >container_name: elasticsearch
+  
+    >environment:
+  
+      >- discovery.type=single-node
+      
+      >- "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      
+    >ports:
+    
+      >- "9200:9200"
+      
+    >restart: unless-stopped
+    
+    >volumes:
+    
+      >- es_data:/usr/share/elasticsearch/data
+      
+    >networks:
+    
+      >- hive_network  # Attach to custom network
  
   TheHive service
+  
   thehive:
+  
     image: thehiveproject/thehive4
+    
     container_name: thehive
+    
     environment:
+    
       - JAVA_OPTS=-Xms512m -Xmx1g
+      
       - CORTEX_URL="http://192.168.1.10:9001"  # Correct container name for Cortex
+      
       #- CORTEX_APIKEY="LTuoOmxx2gbqKuOm78+/snu/A0zkNRVs"
+      
       #- CORTEX_THEHIVE_API_KEY="FpwQZcr0AIabinhzgs0szhzAvU6jtPEq"
+      
       - MISP_URL="https://192.168.1.10"
+      
       - MISP_APIKEY=${MISP_APIKEY}
+      
       - MISP_CERT_IGNORE=true
+      
     depends_on:
+    
       - elasticsearch
+      
       - cortex  # Ensure Cortex is started before TheHive    
+      
     ports:
+    
       -  "9000:9000"
+      
     volumes:
+    
       - thehive_data:/data
+      
     restart: unless-stopped
+    
     networks:
+    
       - hive_network  # Attach to custom network
+    
  
   Cortex service
+  
   cortex:
+  
     image: thehiveproject/cortex:2.1.3
+    
     container_name: cortex
     environment:
       - CORTEX_THEHIVE_URL="http://192.168.1.10:9000"  # TheHive container URL
