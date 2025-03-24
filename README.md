@@ -489,10 +489,10 @@ changed: Pucchu456@27
 ## 5- Transitioning from Cortex 3 to Cortex 2 
 >
 >While doing some research i came accross a documentation which stated that Cortex 3 has some pki issues for authentication and hence suggested to transition to cortex 2
->
+
 >https://github.com/TheHive-Project/TheHive/issues/940
->
->
+
+
 >![image](https://github.com/user-attachments/assets/91df50ed-bfa7-483c-a2d4-d5d5aded156f)
 
 
