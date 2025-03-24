@@ -345,9 +345,9 @@ changed: Pucchu456@27
     
       >- hive_network  # Attach to custom network
  
-  TheHive service
+ > TheHive service
   
-  thehive:
+  >thehive:
   
     image: thehiveproject/thehive4
     
@@ -390,41 +390,62 @@ changed: Pucchu456@27
       - hive_network  # Attach to custom network
     
  
-  Cortex service
+  >Cortex service
   
   cortex:
   
     image: thehiveproject/cortex:2.1.3
     
     container_name: cortex
+    
     environment:
+    
       - CORTEX_THEHIVE_URL="http://192.168.1.10:9000"  # TheHive container URL
+      
       #- CORTEX_APIKEY="LTuoOmxx2gbqKuOm78+/snu/A0zkNRVs"  # Use environment variable for the Cortex API key
+      
       #- CORTEX_THEHIVE_API_KEY="FpwQZcr0AIabinhzgs0szhzAvU6jtPEq"  # TheHive API key for Cortex
+      
       - CORTEX_AUTHENTICATION=Bearer  # Set authentication to Bearer token for TheHive API
+      
     depends_on:
+    
       - elasticsearch  # Only depend on Elasticsearch, not TheHive
+      
     ports:
+    
       - "9001:9001"
+      
     restart: unless-stopped
+    
     volumes:
+    
       - cortex_data:/data  # Persistent storage for Cortex data
+      
     networks:
+    
       - hive_network  # Attach to custom network
  
-volumes:
+>volumes:
+
   es_data:
+  
     driver: local  # Persist Elasticsearch data
-  thehive_data:
+    
+  >thehive_data:
+  
     driver: local  # Persist TheHive data
+    
   cortex_data:
+  
     driver: local  # Persist Cortex data
  
-networks:
+>networks:
+
   hive_network:
+  
     driver: bridge  # Use the bridge network for communication
 
-## Step 10 - Setting up Cortex Analysers
 
 
 # Step by Step Troubleshooting:
